@@ -44,7 +44,7 @@ jobs:
     # We can use either running a command or an Action.
     # From here we get Action: https://github.com/marketplace/actions/docker-build-push-action
     - name: Build and Push Docker Image
-      uses: mr-smithers-excellent/docker-build-push@v6
+      uses: mr-smithers-excellent/docker-build-push@v4
       with:
         image: nadyinky/demo-app
         registry: docker.io
