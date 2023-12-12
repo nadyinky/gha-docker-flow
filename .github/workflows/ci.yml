@@ -1,9 +1,11 @@
+###########
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+###########
 
 name: Java CI with Gradle
 
@@ -16,10 +18,14 @@ on:
 jobs:
   # We can use any name, not just "build"
   build:
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ubuntu-latest
+    ###########
+    # We can run and test code on different OS in parallel.
+    # runs-on: ${{matrix.os}}
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest, windows-latest, macOS-latest]
+    ###########
 
     steps:
     - uses: actions/checkout@v2
@@ -34,7 +40,26 @@ jobs:
     
     - name: Build with Gradle
       run: ./gradlew build
+
+    # We can use either running a command or an Action.
+    # From here we get Action: https://github.com/marketplace/actions/docker-build-push-action
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: nadyinky/demo-app
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+      ########### 
+      # An example of a multiline command (for that we use pipe sign "|")
+      # run: | 
+      #   docker login [credentials]
+      #   docker build [...] 
+      #   docker tag [...], etc
+      ###########
   
+  ###########
   # If necessary we can use an additional block of steps
   # publish:
     # needs: build
+  ###########
